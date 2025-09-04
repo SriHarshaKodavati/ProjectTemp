@@ -1,0 +1,21 @@
+You're right to be cautious about pasting code into the browser console. Let's use a safer approach.
+Instead of using the browser console, let's test the API using Postman or curl command, or we can add a temporary test button to your application.
+Option 1: Test with Postman (Recommended)
+
+Download Postman (if you don't have it)
+Create a new POST request:
+
+URL: http://localhost:8080/api/applications/5/document-details (replace 5 with your actual application ID)
+Method: POST
+Headers: Content-Type: application/json
+Body (raw JSON):
+
+json{
+  "panCardPath": null,
+  "aadhaarCardPath": null,
+  "salarySlipPath": null,
+  "bankStatementPath": null,
+  "photoPath": null
+}
+
+Send the request and see what response you ge
