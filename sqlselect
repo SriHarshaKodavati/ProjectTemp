@@ -1,0 +1,137 @@
+-- 1. View all loan applications
+SELECT * FROM loan_application ORDER BY id DESC;
+
+-- 2. View specific loan application with all related data (JOIN query)
+SELECT 
+    la.id as application_id,
+    la.status,
+    la.created_at,
+    la.updated_at,
+    -- Personal Details
+    pd.full_name,
+    pd.phone_number,
+    pd.marital_status,
+    pd.pan_number,
+    pd.gender,
+    pd.date_of_birth,
+    -- Employment Details  
+    ed.employment_type,
+    ed.employer_name,
+    ed.monthly_income,
+    ed.years_of_experience,
+    -- Loan Details
+    ld.loan_type,
+    ld.loan_amount,
+    ld.loan_tenure,
+    ld.loan_purpose,
+    -- Reference Details
+    rd.full_name as reference_name,
+    rd.relationship_with_applicant,
+    rd.contact_number as reference_contact
+FROM loan_application la
+LEFT JOIN personal_details pd ON la.id = pd.loan_application_id
+LEFT JOIN employment_details ed ON la.id = ed.loan_application_id  
+LEFT JOIN loan_details ld ON la.id = ld.loan_application_id
+LEFT JOIN reference_details rd ON la.id = rd.loan_application_id
+ORDER BY la.id DESC;
+
+-- 3. View individual tables separately
+
+-- Personal Details
+SELECT 
+    pd.*,
+    la.status as application_status
+FROM personal_details pd 
+JOIN loan_application la ON pd.loan_application_id = la.id
+ORDER BY pd.id DESC;
+
+-- Employment Details
+SELECT 
+    ed.*,
+    la.status as application_status
+FROM employment_details ed 
+JOIN loan_application la ON ed.loan_application_id = la.id
+ORDER BY ed.id DESC;
+
+-- Loan Details
+SELECT 
+    ld.*,
+    la.status as application_status
+FROM loan_details ld 
+JOIN loan_application la ON ld.loan_application_id = la.id
+ORDER BY ld.id DESC;
+
+-- Document Details
+SELECT 
+    dd.*,
+    la.status as application_status
+FROM document_details dd 
+JOIN loan_application la ON dd.loan_application_id = la.id
+ORDER BY dd.id DESC;
+
+-- Existing Loan Details
+SELECT 
+    eld.*,
+    la.status as application_status
+FROM exiting_loan_details eld 
+JOIN loan_application la ON eld.loan_application_id = la.id
+ORDER BY eld.id DESC;
+
+-- Reference Details
+SELECT 
+    rd.*,
+    la.status as application_status
+FROM reference_details rd 
+JOIN loan_application la ON rd.loan_application_id = la.id
+ORDER BY rd.id DESC;
+
+-- 4. Count applications by status
+SELECT status, COUNT(*) as count 
+FROM loan_application 
+GROUP BY status;
+
+-- 5. Get the latest 5 applications
+SELECT 
+    la.id,
+    la.status,
+    pd.full_name,
+    pd.phone_number,
+    ld.loan_type,
+    ld.loan_amount,
+    la.created_at
+FROM loan_application la
+LEFT JOIN personal_details pd ON la.id = pd.loan_application_id
+LEFT JOIN loan_details ld ON la.id = ld.loan_application_id
+ORDER BY la.created_at DESC
+LIMIT 5;
+
+-- 6. Search by PAN number
+SELECT 
+    la.*,
+    pd.full_name,
+    pd.pan_number
+FROM loan_application la
+JOIN personal_details pd ON la.id = pd.loan_application_id
+WHERE pd.pan_number = 'ABCDE1234F'; -- Replace with actual PAN number
+
+-- 7. Search by phone number
+SELECT 
+    la.*,
+    pd.full_name,
+    pd.phone_number
+FROM loan_application la
+JOIN personal_details pd ON la.id = pd.loan_application_id
+WHERE pd.phone_number = '1234567890'; -- Replace with actual phone number
+
+-- 8. Applications with loan amount greater than specific value
+SELECT 
+    la.id,
+    pd.full_name,
+    ld.loan_type,
+    ld.loan_amount,
+    la.status
+FROM loan_application la
+JOIN personal_details pd ON la.id = pd.loan_application_id
+JOIN loan_details ld ON la.id = ld.loan_application_id
+WHERE ld.loan_amount > 100000
+ORDER BY ld.loan_amount DESC;
