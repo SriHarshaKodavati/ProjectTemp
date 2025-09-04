@@ -135,3 +135,22 @@ JOIN personal_details pd ON la.id = pd.loan_application_id
 JOIN loan_details ld ON la.id = ld.loan_application_id
 WHERE ld.loan_amount > 100000
 ORDER BY ld.loan_amount DESC;
+
+
+
+
+
+
+SELECT 
+    la.id as application_id,
+    la.status,
+    pd.full_name,
+    pd.phone_number,
+    ed.employer_name,
+    ld.loan_type,
+    ld.loan_amount
+FROM loan_application la
+LEFT JOIN personal_details pd ON la.id = pd.loan_application_id
+LEFT JOIN employment_details ed ON la.id = ed.loan_application_id  
+LEFT JOIN loan_details ld ON la.id = ld.loan_application_id
+ORDER BY la.id DESC;
