@@ -651,7 +651,8 @@ const LoanApplicationForm = () => {
             await saveLoanDetails(formData);
             break;
           case "documents":
-            await saveDocumentDetails(uploadedFiles);
+            // Skip document saving for now
+            console.log('Skipping document save for testing');
             break;
           case "existing":
             await saveExistingLoanDetails(formData);
