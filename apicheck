@@ -1,0 +1,19 @@
+// Replace 5 with your actual applicationId
+fetch('http://localhost:8080/api/applications/5/document-details', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: '{"panCardPath":null,"aadhaarCardPath":null,"salarySlipPath":null,"bankStatementPath":null,"photoPath":null}'
+})
+.then(response => {
+  console.log('Status:', response.status);
+  return response.text();
+})
+.then(text => {
+  console.log('Response:', text);
+  try {
+    console.log('JSON:', JSON.parse(text));
+  } catch (e) {
+    console.log('Not valid JSON response');
+  }
+})
+.catch(err => console.error('Fetch error:', err));
